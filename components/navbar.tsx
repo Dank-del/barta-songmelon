@@ -1,56 +1,20 @@
+"use client";
+
 import {
 	Navbar as NextUINavbar,
 	NavbarContent,
-	NavbarMenu,
-	NavbarMenuToggle,
 	NavbarBrand,
-	NavbarItem,
-	NavbarMenuItem,
+	NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle,
 } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/button";
-import { Kbd } from "@nextui-org/kbd";
-import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
-
-import { link as linkStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
+import {LogIn, LogOut} from 'lucide-react';
 import NextLink from "next/link";
-import clsx from "clsx";
-
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-	TwitterIcon,
-	GithubIcon,
-	DiscordIcon,
-	HeartFilledIcon,
-	SearchIcon,
-} from "@/components/icons";
-
-import { Logo } from "@/components/icons";
+import {signIn, signOut, useSession} from "next-auth/react";
+import {Avatar} from "@nextui-org/avatar";
 
 export const Navbar = () => {
-	const searchInput = (
-		<Input
-			aria-label="Search"
-			classNames={{
-				inputWrapper: "bg-default-100",
-				input: "text-sm",
-			}}
-			endContent={
-				<Kbd className="hidden lg:inline-block" keys={["command"]}>
-					K
-				</Kbd>
-			}
-			labelPlacement="outside"
-			placeholder="Search..."
-			startContent={
-				<SearchIcon className="flex-shrink-0 text-base pointer-events-none text-default-400" />
-			}
-			type="search"
-		/>
-	);
-
+	const { status, data } = useSession();
 	return (
 		<NextUINavbar maxWidth="xl" position="static">
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -72,22 +36,55 @@ export const Navbar = () => {
 					<ThemeSwitch />
 				</NavbarItem>
 				<NavbarItem className="hidden md:flex">
-					<Button
-						isExternal
-						as={Link}
+					{status === "authenticated" ? <>
+						<Button
+							className="text-sm font-normal text-default-600 bg-default-100"
+							startContent={<LogOut className="text-danger" />}
+							endContent={<Avatar className="m-2" size="sm" isBordered color="danger" src={data?.user?.image!} />}
+							variant="flat"
+							onClick={() => signOut()}
+						>
+							Log Out ({data?.user?.name})
+						</Button>
+					</> : <Button
 						className="text-sm font-normal text-default-600 bg-default-100"
-						href={siteConfig.links.sponsor}
-						startContent={<HeartFilledIcon className="text-danger" />}
+						startContent={<LogIn className="text-success" />}
 						variant="flat"
+						onClick={() => signIn('google')}
 					>
-						Sponsor
-					</Button>
+						Log In
+					</Button>}
 				</NavbarItem>
 			</NavbarContent>
 
 			<NavbarContent className="pl-4 sm:hidden basis-1" justify="end">
 				<ThemeSwitch />
+				<NavbarMenuToggle />
 			</NavbarContent>
+			<NavbarMenu>
+				<div className="mx-4 mt-2 flex flex-col gap-2">
+						<NavbarMenuItem >
+							{status === "authenticated" ? <>
+								<Button
+									className="text-sm font-normal text-default-600 bg-default-100"
+									startContent={<LogOut className="text-danger" />}
+									endContent={<Avatar className="m-2" size="sm" isBordered color="danger" src={data?.user?.image!} />}
+									variant="flat"
+									onClick={() => signOut()}
+								>
+									Log Out ({data?.user?.name})
+								</Button>
+							</> : <Button
+								className="text-sm font-normal text-default-600 bg-default-100"
+								startContent={<LogIn className="text-success" />}
+								variant="flat"
+								onClick={() => signIn('google')}
+							>
+								Log In
+							</Button>}
+						</NavbarMenuItem>
+				</div>
+			</NavbarMenu>
 		</NextUINavbar>
 	);
 };

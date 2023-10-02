@@ -11,6 +11,7 @@
   "dependencies": {
     "@livekit/components-react": "^1.2.2",
     "@livekit/components-styles": "^1.0.6",
+    "@nextui-org/avatar": "^2.0.21",
     "@nextui-org/button": "2.0.18",
     "@nextui-org/code": "2.0.16",
     "@nextui-org/input": "2.1.6",
@@ -35,11 +36,15 @@
     "intl-messageformat": "^10.5.0",
     "livekit-client": "^1.13.3",
     "livekit-server-sdk": "^1.2.6",
+    "lucide-react": "^0.279.0",
     "next": "13.4.19",
+    "next-auth": "4.22.1",
     "next-themes": "^0.2.1",
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.47.0",
+    "short-uuid": "^4.2.2",
     "tailwind-variants": "^0.1.13",
     "tailwindcss": "3.3.3",
     "typescript": "5.0.4"
